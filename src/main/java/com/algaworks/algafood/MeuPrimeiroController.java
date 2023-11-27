@@ -28,6 +28,6 @@ public class MeuPrimeiroController {
 		Cliente joao = new Cliente("Joao", "joao@gmail.com", "123123123123");
 		ativacaoClienteService.ativar(joao);
 		
-		return "Cliente: " + joao.getNome() + "Ativado com sucesso";
+		return "Cliente: " + joao.getNome() + " Ativado com sucesso";
 	}
 }
