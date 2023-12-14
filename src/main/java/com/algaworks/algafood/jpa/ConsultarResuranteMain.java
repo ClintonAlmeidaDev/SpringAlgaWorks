@@ -19,7 +19,7 @@ public class ConsultarResuranteMain {
 	    Restaurante restaurante = restauranteRepository.porId(1L);
 		
 		
-			System.out.println(restaurante.getNome());
+			System.out.println(restaurante.getNome() + " " + restaurante.getTaxaFrete() + " " + restaurante.getCozinha().getNome());
 		
 	}
 }
