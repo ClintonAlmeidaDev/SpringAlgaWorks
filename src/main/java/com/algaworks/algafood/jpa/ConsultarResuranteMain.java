@@ -16,7 +16,7 @@ public class ConsultarResuranteMain {
 		
 		RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
 		
-	    Restaurante restaurante = restauranteRepository.porId(1L);
+	    Restaurante restaurante = restauranteRepository.buscar(1L);
 		
 		
 			System.out.println(restaurante.getNome() + " " + restaurante.getTaxaFrete() + " " + restaurante.getCozinha().getNome());
