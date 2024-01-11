@@ -25,20 +25,20 @@ public class EstadoRepositoryImpl implements EstadoRepository{
 	}
 	
 	@Override
-	public Estado porId(Long id) {
+	public Estado buscar(Long id) {
 		return manager.find(Estado.class, id);
 	}
 	
 	@Override
 	@Transactional
-	public Estado adicionar(Estado estado) {
+	public Estado salvar(Estado estado) {
 		return manager.merge(estado);
 	}
 	
 	@Override
 	@Transactional
 	public void remover(Estado estado) {
-		estado = porId(estado.getId());
+		estado = buscar(estado.getId());
 		manager.remove(estado);
 	}
 }
