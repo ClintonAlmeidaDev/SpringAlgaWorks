@@ -16,4 +16,5 @@ public class CadastroEstadoService {
 		return estadoRepository.salvar(estado);
 	}
 	
+	
 }
