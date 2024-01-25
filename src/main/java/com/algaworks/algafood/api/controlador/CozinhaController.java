@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controlador;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,28 +37,20 @@ public class CozinhaController {
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cozinha> listar(){
-		return cozinhaRepository.listar();
+
+		return cozinhaRepository.findAll();
 	}
 	
 	
 	@ResponseStatus(code = HttpStatus.OK)
 	@GetMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> buscar(@PathVariable Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.buscar(cozinhaId);
-		if (cozinha != null) {
-			return ResponseEntity.ok(cozinha);
+		Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
+		if (cozinha.isPresent()) {
+			return ResponseEntity.ok(cozinha.get());
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		
-		//return ResponseEntity.status(HttpStatus.OK).body(cozinha);	
-		//return ResponseEntity.ok(cozinha);
-	
-		//HttpHeaders headers = new HttpHeaders();
-		//headers.add(HttpHeaders.LOCATION, "http://localhost:8080/cozinhas");
-		
-		//return ResponseEntity.status(HttpStatus.FOUND)
-		//		.headers(headers)
-		//		.build();	
+
 		}
 	
 	@PostMapping
@@ -68,14 +61,14 @@ public class CozinhaController {
 	
 	@PutMapping("/{cozinhaId}")
 	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha){
-		Cozinha cozinhaAtual = cozinhaRepository.buscar(cozinhaId);
+		Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
      	//cozinhaAtual.setNome(cozinha.getNome());
 		
-		if(cozinhaAtual != null) {
-		BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
-		cadastroCozinha.salvar(cozinhaAtual);
+		if(cozinhaAtual.isPresent()) {
+		BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
+		Cozinha cozinhaSalva = cadastroCozinha.salvar(cozinhaAtual.get());
 		
-		return ResponseEntity.ok(cozinhaAtual);
+		return ResponseEntity.ok(cozinhaSalva);
 		}
 		return ResponseEntity.notFound().build();
 	}
