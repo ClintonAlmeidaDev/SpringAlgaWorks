@@ -1,7 +1,5 @@
 package com.algaworks.algafood.domain.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,13 +28,13 @@ public class CadastroRestauranteService {
 				String.format("Não existe cadastro de cozinha com o codigo %d", cozinhaId)));
 		
 		restaurante.setCozinha(cozinha);
-		return restauranteRepository.salvar(restaurante);
+		return restauranteRepository.save(restaurante);
 	}
 	
 	public void excluir(Long restauranteId) {
 		
 		try {
-			restauranteRepository.remover(restauranteId);
+			restauranteRepository.deleteById(restauranteId);
 		}catch(EmptyResultDataAccessException e) {
 			throw new EntidadeNaoEncontradaException(String.format("Nao existe um cadastro de estado omm o codigo %d", restauranteId));
 			

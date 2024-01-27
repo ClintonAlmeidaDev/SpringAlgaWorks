@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controlador;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,16 +37,16 @@ public class CidadeController {
 	
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Cidade> listar(){
-		return cidadeRepository.listar();
+		return cidadeRepository.findAll();
 	}
 	
 	@ResponseStatus(code = HttpStatus.OK)
 	@GetMapping("/{cidadeId}")
 	public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId){
-		Cidade restaurante = cidadeRepository.buscar(cidadeId);
+		Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
 		
-		if(restaurante != null) {
-			return ResponseEntity.ok(restaurante);
+		if(cidade.isPresent()) {
+			return ResponseEntity.ok(cidade.get());
 		}
 		
 		return ResponseEntity.notFound().build();
@@ -65,16 +66,16 @@ public class CidadeController {
 	
 	@PutMapping("/{cidadeId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long cidadeId, @RequestBody Cidade cidade){
-		
+		Optional<Cidade> cidadeAtual = cidadeRepository.findById(cidadeId);
 		
 		try {			
-			Cidade cidadeAtual = cidadeRepository.buscar(cidadeId);
 			
-			if(cidadeAtual != null) {
-				BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+			
+			if(cidadeAtual.isPresent()) {
+				BeanUtils.copyProperties(cidade, cidadeAtual.get(), "id");
 				
-				cidadeAtual = cadastroCidade.salvar(cidadeAtual);
-				return ResponseEntity.ok(cidadeAtual);
+				Cidade cidadeSalva = cadastroCidade.salvar(cidadeAtual.get());
+				return ResponseEntity.ok(cidadeSalva);
 			}
 			
 			return ResponseEntity.notFound().build();
